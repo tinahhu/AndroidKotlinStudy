@@ -79,6 +79,7 @@ fun TodoList() {
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
+                // 用于修改左右两侧的padding间距
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -105,12 +106,17 @@ fun TodoList() {
             ) {
                 Text("添加")
             }
-
+            /**
+             * 放了一个间隔块在添加和list中间，高度为20dp
+             */
             Spacer(modifier = Modifier.height(20.dp))
 
             if (todoList.isEmpty()) {
                 Text("暂无代办事项", color = Color.Gray)
             } else {
+                /**
+                 * 懒加载，只渲染可见项，自带垂直滚动
+                 */
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -121,6 +127,11 @@ fun TodoList() {
                                 todoList.remove(item)
                             },
                             onDone = {
+                                /**
+                                 * indexOfFirst 用于遍历列表，找到第一个满足大括号里条件的元素；
+                                 * 返回这个元素在列表中的下标；
+                                 * 如果没有找到满足条件的元素，就返回-1
+                                 */
                                 val index = todoList.indexOfFirst { it.id == item.id }
                                 if (index >= 0) {
                                     todoList[index] = item.copy(isCompleted = !item.isCompleted)
@@ -148,6 +159,9 @@ fun TodoItemRow(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(
+            /**
+             * 给水波纹切圆角
+             */
             modifier = Modifier.clip(MaterialTheme.shapes.small),
             onClick = onDone
         ) {
